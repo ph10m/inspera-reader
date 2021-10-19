@@ -12,16 +12,22 @@ class InsperaQuestion:
         responses = [res['ext_inspera_response'] for res in self.responses() if res['ext_inspera_response'] != None]
         return clean_all(' '.join(responses))
 
-    def grading(self):
+    def manual_scores(self, field):
         scores = self.q['ext_inspera_manualScores']
         if scores is None:
             return None
-        scores = [score['ext_inspera_manualScore'] for score in scores]
+        scores = [score['ext_inspera_' + field] for score in scores]
         if len(scores) != 1:
             scores = ','.join(scores)
         else:
             scores = scores[0]
         return scores
+
+    def grading(self):
+        return self.manual_scores('manualScore')
+
+    def grader(self):
+        return self.manual_scores('gradingTeacherName')
 
     def question_title(self):
         return self.q['ext_inspera_questionTitle']
@@ -42,6 +48,7 @@ class InsperaQuestion:
             self.responses(),
             self.clean_response(),
             self.grading(),
+            self.grader(),
             self.max_score(),
             self.duration()
         ]
