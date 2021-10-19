@@ -7,10 +7,6 @@ A tool to parse the output of exams/assignments from Inspera
 ## usage
 Can be used either in python directly or as a command-line tool to create the dataset directly.
 ### in python
-
-`from inspera import InsperaReader`
-
-`data = InsperaReader(file_path)`
 ```
 from inspera import InsperaReader
 reader = InsperaReader('path/fall_exam_2021.json')
