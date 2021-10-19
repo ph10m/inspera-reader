@@ -1,2 +1,55 @@
 # inspera-reader
 A tool to parse the output of exams/assignments from Inspera
+
+## setup
+`pip install insperareader`
+
+## usage
+Can be used either in python directly or as a command-line tool to create the dataset directly.
+### in python
+
+`from insperareader import InsperaReader`
+
+`data = InsperaReader(file_path)`
+```
+for candidate in data.candidates():
+    for question in candidate.questions():
+        # access any desired field and build your data 
+        my_custom_data = [question.id(), question.grading(), question.clean_response()]
+        # or access the predefined make-row field, intended for further use with pandas
+        my_custom_data = question.make_row()
+```
+### command line (NOT IMPLEMENTED)
+`python -m insperareader --file path --outfile path --name name`
+
+a default setting that includes the following fields for each candidate's response (through `make_row`):
+- question id
+- responses
+- parsed responses
+- grading
+- max score
+- duration
+
+## classes
+### InsperaCandidate
+- id (candidate id) -> int
+- score (total score) -> int
+- start_end (date_from - date_to) -> str
+- questions (data related to each question in the assignment) -> list[InsperaQuestion]
+
+### InsperaQuestion
+- responses (raw data) -> list(str)
+- clean_response (parsed data) -> list(str)
+- grading (list of grades) -> list(int)
+- question_title -> str
+- question_num -> int
+- max_score -> int
+- duration -> int
+- make_row -> list of above fields
+
+Also implements a print override, containing simplified information.
+
+
+# TODO:
+- [ ] implement CLI
+- [ ] generalize field names in a config file (e.g. yml)
